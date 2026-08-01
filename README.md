@@ -92,13 +92,7 @@ node scripts/vision.js --url "https://example.com/image.png" "请描述图片"
 
 同时兼容 `ZHIPU_API_KEY`、`GLM_API_KEY`、`DASHSCOPE_API_KEY` 等旧变量。脚本零 npm 依赖，使用 Node.js 内置网络模块。
 
-## 安全清单（公开仓库前必做）
 
-- [x] `.env` 被忽略，仓库只提供 `.env.example` 占位符。
-- [x] 不上传 `~/.codex/`、CC Switch 数据库、会话日志、截图中的个人聊天记录或任何真实 API Key。
-- [x] README 使用 `<你的用户名>` 和 `你的真实_API_Key` 等占位符。
-- [x] 提交前扫描常见密钥模式与 Git 暂存区。
-- [ ] 若 Key 曾经出现在任何 Git 提交、终端截图或公开消息中，请立即在平台撤销并新建 Key。
 
 ## 许可证
 
