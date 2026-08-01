@@ -1,0 +1,6 @@
+# Local secrets and generated files
+scripts/.env
+.env
+node_modules/
+npm-debug.log*
+.DS_Store
