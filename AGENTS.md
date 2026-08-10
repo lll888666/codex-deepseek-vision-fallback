@@ -21,5 +21,14 @@ Remote image:
 node scripts/vision.js --url "<image-url>" "请用中文详细描述这张图片的内容。"
 ```
 
+The script tries providers in `VISION_PROVIDER_ORDER` (default
+`agnes25,glm4v,cloudflare,agnes,glm,glm-thinking`), switching on every failure.
+If all providers fail, use local OCR:
+
+```bash
+bash scripts/local_ocr.sh "<absolute-image-path>"
+```
+
 Do not put a real API key in this file, source control, prompts, logs, or chat
-messages.
+messages. Use environment variables, `.env` (git-ignored), or macOS Keychain
+(`security add-generic-password -s vision-fallback -a <KEY_NAME> -w <secret>`).
