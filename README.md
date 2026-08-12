@@ -1,5 +1,7 @@
 # Codex / DeepSeek 视觉回退（多模型自动切换）
 
+![宣传图片](assets/promo-banner.png)
+
 让没有原生视觉能力的编码代理（如 DeepSeek）自动读图：把图片转成文字描述，交还给原模型继续处理。**官方 Codex / GPT 保持原生识图，绝不把图片额外发送给第三方 API**。
 
 ## 特性
