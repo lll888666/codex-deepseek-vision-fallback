@@ -54,7 +54,7 @@
 
 完整演示视频（从发起指令到 6 个模型并发返回的全过程）：
 
-<video src="assets/demo-multimodal-latency.mp4" controls width="100%"></video>
+<video src="https://raw.githubusercontent.com/lll888666/codex-deepseek-vision-fallback/main/assets/demo-multimodal-latency.mp4" controls></video>
 
 > 视频无法播放时，可下载查看：[多模态延迟测试.mp4](assets/demo-multimodal-latency.mp4)
 
