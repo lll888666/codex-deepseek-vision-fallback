@@ -7,6 +7,7 @@
 ## 特性
 
 - **多模型自动切换**：每个模型失败一次立即切下一个（429 限流 / 超时 / 密钥无效等），无需手工干预
+- **一句话配置向导**：说一句「配置 API key」即可弹出终端表单，隐藏输入各大厂商密钥并自动测试有效性
 - **全免费 + 速度优先**默认链路，也支持接入付费旗舰模型
 - **大图自动压缩**：>1.5MB 用 macOS `sips` 压缩到 1280px 再上传，显著降低延迟
 - **密钥不落明文**：支持环境变量 / `.env` / macOS Keychain 三种方式，Keychain 为系统级加密存储
@@ -32,6 +33,30 @@
 | 6 | `glm-4.1v-thinking-flash` | 智谱 | 5-6s | 免费 |
 
 全部失败后自动提示转本地 OCR（`local_ocr.sh`，tesseract）。
+
+## 实测效果（真实案例）
+
+真实场景下的**多模型并发延迟测试**：对同一张像素风图片，6 个视觉回退模型同时发起识别请求，全部成功返回，并发总耗时仅 **1.54 秒**。
+
+![向智能体发起并发测试指令](assets/demo-test-request.png)
+
+![6 模型并发延迟测试结果](assets/demo-concurrent-result.png)
+
+| 模型 | 状态 | 用时 |
+|------|------|------|
+| `agnes-2.5-flash` | ✅ OK | 0.97s |
+| `glm-4v-flash` | ✅ OK | 1.53s |
+| `llama-4-scout-17b`（Cloudflare） | ✅ OK | 1.53s |
+| `agnes-2.0-flash` | ✅ OK | 1.52s |
+| `glm-4.6v-flash` | ✅ OK | 1.52s |
+| `glm-4.1v-thinking-flash` | ✅ OK | 1.51s |
+| **并发总耗时** | | **1.54s** |
+
+完整演示视频（从发起指令到 6 个模型并发返回的全过程）：
+
+<video src="assets/demo-multimodal-latency.mp4" controls width="100%"></video>
+
+> 视频无法播放时，可下载查看：[多模态延迟测试.mp4](assets/demo-multimodal-latency.mp4)
 
 ## 安装
 
@@ -61,6 +86,40 @@ cp scripts/.env.example scripts/.env
 3. **`.env` 文件**（仅本地，绝不上传）：复制 `.env.example` 后填写。
 
 支持的密钥键名：`AGNES_API_KEY`、`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`（非密钥，可放 `.env`）、`VISION_API_KEY`（智谱）、`DASHSCOPE_API_KEY`（千问）。
+
+## 一句话配置向导（推荐）
+
+使用人只需说一句「**配置 API key**」，智能体就会运行配置向导——弹出终端"盒子"表单，逐平台填写密钥并**自动测试有效性**：
+
+```bash
+# 交互式配置：逐平台输入密钥（隐藏回显）→ 自动测试 → 保存到 Keychain / .env
+node scripts/setup.js
+
+# 只检测当前所有已配置密钥是否有效
+node scripts/check-keys.js
+
+# 临时传入密钥只验证、不落盘（适合把密钥直接交给智能体代验）
+node scripts/setup.js --non-interactive VISION_API_KEY=xxx AGNES_API_KEY=yyy
+```
+
+向导流程（每个平台）：
+
+1. 显示当前配置状态（已配置显示密钥末 4 位）；
+2. 询问是否配置/重新配置，输入密钥时**隐藏回显**——密钥不显示在屏幕，也不进入聊天记录；
+3. 立即验证：先 `GET /models` 零费用探测，失败自动转最小 chat 请求；
+4. 验证通过（或用户坚持保存）后写入 **macOS Keychain** 或 `scripts/.env`（git-ignored）；
+5. 结束后汇总表格展示每个密钥 ✅ 有效 / ❌ 无效 / ⏭ 跳过。
+
+验证判定规则：2xx = 有效；429 = 有效但被限流；401/403 = 无效或无权访问；其他错误显示平台返回的具体原因。Cloudflare 缺 `CLOUDFLARE_ACCOUNT_ID` 时退化为验证 token 本身（`tokens/verify`）。
+
+## 各大厂商控制台地址
+
+| 平台 | 控制台地址 | 说明 |
+|------|-----------|------|
+| 智谱 GLM | [open.bigmodel.cn/usercenter/apikeys](https://open.bigmodel.cn/usercenter/apikeys) | 免费额度，申请 `VISION_API_KEY` |
+| Agnes 聚合 | [platform.agnes-ai.com](https://platform.agnes-ai.com/) | OpenAI 兼容聚合平台，申请 `AGNES_API_KEY` |
+| Cloudflare Workers AI | [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) | 免费额度，申请 `CLOUDFLARE_API_TOKEN` 与 Account ID |
+| 阿里云百炼（千问） | [bailian.console.aliyun.com](https://bailian.console.aliyun.com/) | 付费可选，申请 `DASHSCOPE_API_KEY` |
 
 ## 命令行用法
 

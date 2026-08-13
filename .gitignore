@@ -4,3 +4,8 @@ scripts/.env
 node_modules/
 npm-debug.log*
 .DS_Store
+
+# Local runtime & personal drafts (not part of the project)
+.reasonix/
+script*.md
+*.srt
