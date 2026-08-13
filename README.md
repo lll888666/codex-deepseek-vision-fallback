@@ -52,11 +52,11 @@
 | `glm-4.1v-thinking-flash` | ✅ OK | 1.51s |
 | **并发总耗时** | | **1.54s** |
 
-完整演示视频（从发起指令到 6 个模型并发返回的全过程）：
+完整演示视频（从发起指令到 6 个模型并发返回的全过程，GIF 内嵌预览）：
 
-<video src="https://github.com/lll888666/codex-deepseek-vision-fallback/raw/main/assets/demo-multimodal-latency.mp4" controls></video>
+![多模态延迟测试演示](assets/demo-multimodal-latency.gif)
 
-> 视频无法播放时，可下载查看：[多模态延迟测试.mp4](assets/demo-multimodal-latency.mp4)
+> 需要高清原片（1080p / 含声音）可下载：[多模态延迟测试.mp4](assets/demo-multimodal-latency.mp4)
 
 ## 安装
 
